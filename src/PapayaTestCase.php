@@ -1,10 +1,11 @@
 <?php
 
 if (!defined('PAPAYA_INCLUDE_PATH')) {
-  if (is_dir(dirname(__FILE__).'/../cms-core')) {
-    define('PAPAYA_INCLUDE_PATH', dirname(__FILE__).'/../cms-core/');
+  $dir = dirname(__FILE__);
+  if (is_dir($dir.'/../cms-core/src')) {
+    define('PAPAYA_INCLUDE_PATH', $dir.'/../cms-core/src/');
   } else {
-    define('PAPAYA_INCLUDE_PATH', dirname(__FILE__).str_repeat('/..', 3).'/papaya-lib/');
+    define('PAPAYA_INCLUDE_PATH', $dir.'/../../../src/');
   }
 }
 
