@@ -1,0 +1,7 @@
+{
+  "name": "papaya/test-framework",
+  "description": "papaya CMS unittest framework",
+  "autoload": {
+    "classmap": ["./src/"]
+  }
+}
