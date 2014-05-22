@@ -2,8 +2,8 @@
 
 if (!defined('PAPAYA_INCLUDE_PATH')) {
   $dir = dirname(__FILE__);
-  if (is_dir($dir.'/../cms-core/src')) {
-    define('PAPAYA_INCLUDE_PATH', $dir.'/../cms-core/src/');
+  if (is_dir($dir.'/../../cms-core/src')) {
+    define('PAPAYA_INCLUDE_PATH', $dir.'/../../cms-core/src/');
   } else {
     define('PAPAYA_INCLUDE_PATH', $dir.'/../../../src/');
   }
