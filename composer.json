@@ -1,6 +1,8 @@
 {
   "name": "papaya/test-framework",
   "description": "papaya CMS unittest framework",
+  "license": "GPL-2.0",
+  "homepage": "http://www.papaya-cms.com/",
   "autoload": {
     "classmap": ["./src/"]
   }
