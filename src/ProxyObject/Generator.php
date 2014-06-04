@@ -71,7 +71,7 @@ class PapayaProxyObjectGenerator {
    * @param bool $callAutoload
    * @return array
    */
-  public function generate($originalClassName, array $methods = NULL, $proxyClassName = '',
+  public static function generate($originalClassName, array $methods = NULL, $proxyClassName = '',
                            $callAutoload = FALSE) {
 
     if ($proxyClassName == '') {
