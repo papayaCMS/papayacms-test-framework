@@ -67,7 +67,9 @@ abstract class PapayaTestCase extends PHPUnit_Framework_TestCase {
    * @param string|array $classMaps
    */
   public static function registerPapayaAutoloader(array $paths = array(), $classMaps = NULL) {
-    if (!in_array('PapayaAutoloader::load', spl_autoload_functions())) {
+    $autoloadFunctions = spl_autoload_functions();
+    if (!$autoloadFunctions ||
+        !in_array('PapayaAutoloader::load', $autoloadFunctions)) {
       include_once(PAPAYA_INCLUDE_PATH.'system/Papaya/Autoloader.php');
       spl_autoload_register('PapayaAutoloader::load');
     }
