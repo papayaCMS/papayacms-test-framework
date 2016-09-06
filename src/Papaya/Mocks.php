@@ -12,9 +12,12 @@ PapayaTestCase::defineConstantDefaults(
 
 class PapayaMocks {
 
-  private $_testCase = NULL;
+  /**
+   * @var PapayaTestCase
+   */
+  private $_testCase;
 
-  public function __construct(PHPUnit_Framework_TestCase $testCase) {
+  public function __construct(PapayaTestCase $testCase) {
     $this->_testCase = $testCase;
   }
 
