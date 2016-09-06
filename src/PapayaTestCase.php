@@ -286,7 +286,7 @@ abstract class PapayaTestCase extends PHPUnit_Framework_TestCase {
     $callOriginalClone = TRUE, $callAutoload = TRUE, $cloneArguments = FALSE, $callOriginalMethods = FALSE,
     $proxyTarget = NULL
   ) {
-    $mockBuilder = $this->getMockBuilder($originalClassName);
+    $mockBuilder = new PHPUnit_Framework_MockObject_MockBuilder($this, $originalClassName);
     if (!empty($methods)) {
       $mockBuilder->setMethods($methods);
     }
