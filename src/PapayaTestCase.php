@@ -267,9 +267,9 @@ abstract class PapayaTestCase extends PHPUnit_Framework_TestCase {
   }
 
   /**
+   * Reimplement getMock() using the mock builder
    *
-   * Republish getMock()
-   *
+   * @deprecated
    * @param string $originalClassName
    * @param array $methods
    * @param array $arguments
@@ -286,10 +286,35 @@ abstract class PapayaTestCase extends PHPUnit_Framework_TestCase {
     $callOriginalClone = TRUE, $callAutoload = TRUE, $cloneArguments = FALSE, $callOriginalMethods = FALSE,
     $proxyTarget = NULL
   ) {
-    return parent::getMock(
-      $originalClassName, $methods, $arguments, $mockClassName, $callOriginalConstructor, $callOriginalClone,
-      $callAutoload, $cloneArguments, $callOriginalMethods, $proxyTarget
-    );
+    $mockBuilder = $this->getMockBuilder($originalClassName);
+    if (!empty($methods)) {
+      $mockBuilder->setMethods($methods);
+    }
+    if (!empty($arguments)) {
+      $mockBuilder->setConstructorArgs($arguments);
+    }
+    if (!empty($mockClassName)) {
+      $mockBuilder->setMockClassName($mockClassName);
+    }
+    if (!$callOriginalConstructor) {
+      $mockBuilder->disableOriginalConstructor();
+    }
+    if (!$callOriginalClone) {
+      $mockBuilder->disableOriginalClone();
+    }
+    if (!$callAutoload) {
+      $mockBuilder->disableAutoload();
+    }
+    if ($cloneArguments) {
+      $mockBuilder->enableArgumentCloning();
+    }
+    if ($callOriginalMethods) {
+      $mockBuilder->disableProxyingToOriginalMethods();
+    }
+    if (isset($proxyTarget)) {
+      $mockBuilder->setProxyTarget($proxyTarget);
+    }
+    return $mockBuilder->getMock();
   }
 }
 

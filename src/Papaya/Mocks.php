@@ -115,10 +115,6 @@ class PapayaMocks {
       ->expects($testCase->any())
       ->method('getOption')
       ->will($testCase->returnCallback(array($this, 'callbackOptionsGet')));
-    $options
-      ->expects($testCase->any())
-      ->method('getTableName')
-      ->will($testCase->returnCallback(array($this, 'callbackOptionsGetTableName')));
     return $options;
   }
 
