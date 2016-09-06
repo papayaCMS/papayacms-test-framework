@@ -286,35 +286,44 @@ abstract class PapayaTestCase extends PHPUnit_Framework_TestCase {
     $callOriginalClone = TRUE, $callAutoload = TRUE, $cloneArguments = FALSE, $callOriginalMethods = FALSE,
     $proxyTarget = NULL
   ) {
-    $mockBuilder = new PHPUnit_Framework_MockObject_MockBuilder($this, $originalClassName);
-    if (!empty($methods)) {
-      $mockBuilder->setMethods($methods);
+    if (method_exists($this, 'createMock')) {
+      $mockBuilder = new PHPUnit_Framework_MockObject_MockBuilder($this, $originalClassName);
+      if (!empty($methods)) {
+        $mockBuilder->setMethods($methods);
+      }
+      if (!empty($arguments)) {
+        $mockBuilder->setConstructorArgs($arguments);
+      }
+      if (!empty($mockClassName)) {
+        $mockBuilder->setMockClassName($mockClassName);
+      }
+      if (!$callOriginalConstructor) {
+        $mockBuilder->disableOriginalConstructor();
+      }
+      if (!$callOriginalClone) {
+        $mockBuilder->disableOriginalClone();
+      }
+      if (!$callAutoload) {
+        $mockBuilder->disableAutoload();
+      }
+      if ($cloneArguments) {
+        $mockBuilder->enableArgumentCloning();
+      }
+      if ($callOriginalMethods) {
+        $mockBuilder->disableProxyingToOriginalMethods();
+      }
+      if (isset($proxyTarget)) {
+        $mockBuilder->setProxyTarget($proxyTarget);
+      }
+      return $mockBuilder->getMock();
+    } else {
+      /** @noinspection PhpDeprecationInspection */
+      return parent::getMock(
+        $originalClassName, $methods, $arguments, $mockClassName, $callOriginalConstructor,
+        $callOriginalClone, $callAutoload, $cloneArguments, $callOriginalMethods,
+        $proxyTarget
+      );
     }
-    if (!empty($arguments)) {
-      $mockBuilder->setConstructorArgs($arguments);
-    }
-    if (!empty($mockClassName)) {
-      $mockBuilder->setMockClassName($mockClassName);
-    }
-    if (!$callOriginalConstructor) {
-      $mockBuilder->disableOriginalConstructor();
-    }
-    if (!$callOriginalClone) {
-      $mockBuilder->disableOriginalClone();
-    }
-    if (!$callAutoload) {
-      $mockBuilder->disableAutoload();
-    }
-    if ($cloneArguments) {
-      $mockBuilder->enableArgumentCloning();
-    }
-    if ($callOriginalMethods) {
-      $mockBuilder->disableProxyingToOriginalMethods();
-    }
-    if (isset($proxyTarget)) {
-      $mockBuilder->setProxyTarget($proxyTarget);
-    }
-    return $mockBuilder->getMock();
   }
 }
 
