@@ -283,11 +283,12 @@ abstract class PapayaTestCase extends PHPUnit_Framework_TestCase {
    */
   public function getMock(
     $originalClassName, $methods = [], array $arguments = [], $mockClassName = '', $callOriginalConstructor = TRUE,
-    $callOriginalClone = TRUE, $callAutoload = TRUE, $cloneArguments = FALSE, $callOriginalMethods = FALSE
+    $callOriginalClone = TRUE, $callAutoload = TRUE, $cloneArguments = FALSE, $callOriginalMethods = FALSE,
+    $proxyTarget = NULL
   ) {
     return parent::getMock(
       $originalClassName, $methods, $arguments, $mockClassName, $callOriginalConstructor, $callOriginalClone,
-      $callAutoload, $cloneArguments, $callOriginalMethods
+      $callAutoload, $cloneArguments, $callOriginalMethods, $proxyTarget
     );
   }
 }
