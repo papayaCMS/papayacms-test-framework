@@ -232,6 +232,29 @@ class PapayaMocks {
     return $user;
   }
 
+  public function administrationLanguage($language = NULL) {
+    if (!isset($language)) {
+      $language = new PapayaContentLanguage();
+      $language->assign(
+        [
+          'id' => '1',
+          'identifier' => 'en',
+          'code' => 'en-US',
+          'title' => 'English',
+          'image' => 'en.png',
+          'is_interface' => TRUE,
+          'is_content' => TRUE
+        ]
+      );
+    }
+    $switch = $this->_testCase->getMockBuilder('PapayaAdministrationLanguagesSwitch')->getMock();
+    $switch
+      ->expects($this->_testCase->any())
+      ->method('getCurrent')
+      ->will($this->_testCase->returnValue($language));
+    return $switch;
+  }
+
   /*********************
    * PapayaDatabaseRecord
    ********************/
