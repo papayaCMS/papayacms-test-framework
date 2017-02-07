@@ -18,7 +18,13 @@ if (!defined('PAPAYA_DB_TBL_OPTIONS')) {
   define('PAPAYA_DB_TBL_OPTIONS', 'papaya_options');
 }
 
-abstract class PapayaTestCase extends PHPUnit_Framework_TestCase {
+if (class_exists('PHPUnit\Framework\TestCase')) {
+  class Papaya_PHPUnitTestCase extends \PHPUnit\Framework\TestCase {}
+} else {
+  class Papaya_PHPUnitTestCase extends \PHPUnit_Framework_TestCase {}
+}
+
+abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
 
   /**
   * current temporary directory
