@@ -2,12 +2,12 @@
 
 if (!defined('PAPAYA_INCLUDE_PATH')) {
   $dir = dirname(__FILE__);
-  if (is_dir($dir.'/../../cms-core/src')) {
-    define('PAPAYA_INCLUDE_PATH', $dir.'/../../cms-core/src/');
+  if (is_dir($dir . '/../../cms-core/src')) {
+    define('PAPAYA_INCLUDE_PATH', $dir . '/../../cms-core/src/');
   } elseif (strpos($dir, 'vendor')) {
-    define('PAPAYA_INCLUDE_PATH', $dir.'/../../../../src/');
+    define('PAPAYA_INCLUDE_PATH', $dir . '/../../../../src/');
   } else {
-    define('PAPAYA_INCLUDE_PATH', $dir.'/../../../src/');
+    define('PAPAYA_INCLUDE_PATH', $dir . '/../../../src/');
   }
 }
 
@@ -19,22 +19,24 @@ if (!defined('PAPAYA_DB_TBL_OPTIONS')) {
 }
 
 if (class_exists('PHPUnit\Framework\TestCase')) {
-  class Papaya_PHPUnitTestCase extends \PHPUnit\Framework\TestCase {}
+  class Papaya_PHPUnitTestCase extends \PHPUnit\Framework\TestCase {
+  }
 } else {
-  class Papaya_PHPUnitTestCase extends \PHPUnit_Framework_TestCase {}
+  class Papaya_PHPUnitTestCase extends \PHPUnit_Framework_TestCase {
+  }
 }
 
 abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
 
   /**
-  * current temporary directory
-  * @var string
-  */
+   * current temporary directory
+   * @var string
+   */
   protected $_temporaryDirectory = NULL;
   /**
-  * all create temporary directories
-  * @var array
-  */
+   * all create temporary directories
+   * @var array
+   */
   protected $_temporaryDirectories = array();
 
   /**
@@ -51,12 +53,67 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
   private $_papayaDomFixtures = NULL;
 
   /**
-  * Make sure that constants are defined, to avoid notices if they
-  * are used in declarations.
-  *
-  * @param $names
-  * @return void
-  */
+   * setExpectedException() is deprecated, add a wrapper for forward compatibility
+   * extend expectedException to allow for the optional arguments (message and code)
+   *
+   * @param string $exception
+   * @param string|null $message
+   * @param int|null $code
+   */
+  public function expectException($exception, $message = NULL, $code = NULL) {
+    static $useBC = NULL;
+    if (NULL === $useBC) {
+      $useBC = FALSE !== array_search('expectException', get_class_methods(Papaya_PHPUnitTestCase::class));
+    }
+    if ($useBC) {
+      parent::expectException($exception);
+      if ($message !== NULL) {
+        parent::expectExceptionMessage($message);
+      }
+      if ($code !== NULL) {
+        parent::expectExceptionCode($code);
+      }
+    } else {
+      parent::setExpectedException($exception, $message, $code);
+    }
+  }
+
+  /**
+   * And something for BC in newer PHPUnit versions
+   *
+   * @param string $exception
+   * @param string|null $message
+   * @param int|null $code
+   * @deprecated
+   */
+  public function setExpectedException($exception, $message = NULL, $code = NULL) {
+    $this->expectException($exception, $message, $code);
+  }
+
+  public function expectError($severity) {
+    $levels = [
+      E_NOTICE => ['PHPUnit_Framework_Error_Notice', 'PHPUnit\\Framework\\Error\\Notice'],
+      E_DEPRECATED => ['PHPUnit_Framework_Error_Deprecated', 'PHPUnit\\Framework\\Error\\Deprecated']
+    ];
+    if ($levels[$severity]) {
+      foreach ($levels[$severity] as $class) {
+        if (class_exists($class)) {
+          $this->expectException($class);
+          break;
+        }
+      }
+    } else {
+      throw new \InvalidArgumentException('Can not map severity to exception class.');
+    }
+  }
+
+  /**
+   * Make sure that constants are defined, to avoid notices if they
+   * are used in declarations.
+   *
+   * @param $names
+   * @return void
+   */
   public static function defineConstantDefaults($names) {
     if (!is_array($names)) {
       $names = func_get_args();
@@ -75,15 +132,16 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
   public static function registerPapayaAutoloader(array $paths = array(), $classMaps = NULL) {
     $autoloadFunctions = spl_autoload_functions();
     if (!$autoloadFunctions ||
-        !in_array('PapayaAutoloader::load', $autoloadFunctions)) {
-      include_once(PAPAYA_INCLUDE_PATH.'system/Papaya/Autoloader.php');
+      !in_array('PapayaAutoloader::load', $autoloadFunctions)
+    ) {
+      include_once(PAPAYA_INCLUDE_PATH . 'system/Papaya/Autoloader.php');
       spl_autoload_register('PapayaAutoloader::load');
     }
     foreach ($paths as $prefix => $path) {
       if (preg_match('(^/|[a-zA-Z]:[\\\\/])', $path)) {
         PapayaAutoloader::registerPath($prefix, $path);
       } else {
-        PapayaAutoloader::registerPath($prefix, PAPAYA_INCLUDE_PATH.$path);
+        PapayaAutoloader::registerPath($prefix, PAPAYA_INCLUDE_PATH . $path);
       }
     }
     if (isset($classMaps)) {
@@ -92,7 +150,7 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
       }
       foreach ($classMaps as $file) {
         if (!preg_match('(^/|[a-zA-Z]:[\\\\/])', $file)) {
-          $file = PAPAYA_INCLUDE_PATH.$file;
+          $file = PAPAYA_INCLUDE_PATH . $file;
         }
         PapayaAutoloader::registerClassMap(dirname($file), include($file));
       }
@@ -104,7 +162,7 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
    */
   public function mockPapaya() {
     if (NULL === $this->_papayaMocks) {
-      include_once(dirname(__FILE__).'/Papaya/Mocks.php');
+      include_once(dirname(__FILE__) . '/Papaya/Mocks.php');
       $this->_papayaMocks = new PapayaMocks($this);
     }
     return $this->_papayaMocks;
@@ -115,7 +173,7 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
    */
   public function domFixture() {
     if (NULL === $this->_papayaDomFixtures) {
-      include_once(dirname(__FILE__).'/Papaya/DomFixtures.php');
+      include_once(dirname(__FILE__) . '/Papaya/DomFixtures.php');
       $this->_papayaDomFixtures = new PapayaDomFixtures($this);
     }
     return $this->_papayaDomFixtures;
@@ -154,22 +212,26 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
    * @param string $separator
    * @return PapayaRequest
    */
-  public function getMockRequestObject($parameters = array(),
-                                       $url = 'http://www.test.tld/test.html',
-                                       $separator = '[]') {
+  public function getMockRequestObject(
+    $parameters = array(),
+    $url = 'http://www.test.tld/test.html',
+    $separator = '[]'
+  ) {
     return $this->mockPapaya()->request($parameters, $url, $separator);
   }
+
   /**
-  * create a temporary directory for file system functions
-  *
-  * @return string|bool temporary directory
-  */
+   * create a temporary directory for file system functions
+   *
+   * @return string|bool temporary directory
+   */
   public function createTemporaryDirectory() {
     if (function_exists('sys_get_temp_dir')) {
       $baseDirectory = sys_get_temp_dir();
     } elseif (file_exists('/tmp') &&
-              is_dir('/tmp') &&
-              is_writeable('/tmp')) {
+      is_dir('/tmp') &&
+      is_writeable('/tmp')
+    ) {
       $baseDirectory = '/tmp';
     } elseif (is_writeable(dirname(__FILE__))) {
       $baseDirectory = dirname(__FILE__);
@@ -182,19 +244,20 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
     do {
       $rand = substr(base64_encode(rand()), 0, -2);
       if (substr($baseDirectory, -1) == DIRECTORY_SEPARATOR) {
-        $temporaryDirectory = $baseDirectory.'testfs.'.$rand;
+        $temporaryDirectory = $baseDirectory . 'testfs.' . $rand;
       } else {
-        $temporaryDirectory = $baseDirectory.DIRECTORY_SEPARATOR.'testfs.'.$rand;
+        $temporaryDirectory = $baseDirectory . DIRECTORY_SEPARATOR . 'testfs.' . $rand;
       }
     } while (++$counter < 10 &&
-             file_exists($temporaryDirectory) &&
-             is_dir($temporaryDirectory));
+    file_exists($temporaryDirectory) &&
+    is_dir($temporaryDirectory));
     $this->_temporaryDirectory = $temporaryDirectory;
     if (file_exists($this->_temporaryDirectory) &&
-        is_dir($this->_temporaryDirectory)) {
+      is_dir($this->_temporaryDirectory)
+    ) {
       $directory = $this->_temporaryDirectory;
       $this->_temporaryDirectory = '';
-      $this->fail('Test directory "'.$directory.'" did already exists.');
+      $this->fail('Test directory "' . $directory . '" did already exists.');
       return FALSE;
     } else {
       $oldMask = umask(0);
@@ -206,15 +269,17 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
   }
 
   /**
-  * remove temporary directory if it exists
-  * @return void
-  */
+   * remove temporary directory if it exists
+   * @return void
+   */
   public function removeTemporaryDirectory() {
     if (isset($this->_temporaryDirectories) &&
-        is_array($this->_temporaryDirectories)) {
+      is_array($this->_temporaryDirectories)
+    ) {
       foreach ($this->_temporaryDirectories as $temporaryDirectory) {
         if (file_exists($temporaryDirectory) &&
-            is_dir($temporaryDirectory)) {
+          is_dir($temporaryDirectory)
+        ) {
           $directoryIterator = new RecursiveDirectoryIterator($temporaryDirectory);
           $fileIterator = new RecursiveIteratorIterator(
             $directoryIterator, RecursiveIteratorIterator::CHILD_FIRST
@@ -222,7 +287,8 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
           foreach ($fileIterator as $file) {
             if ($file->isDir()) {
               if ($file->getBasename() != '.' &&
-                  $file->getBasename() != '..') {
+                $file->getBasename() != '..'
+              ) {
                 rmdir($file->getPathname());
               }
             } else {
@@ -235,9 +301,11 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
     }
   }
 
-  public function getProxy($originalClassName, array $methods = NULL, array $arguments = array(),
-                           $proxyClassName = '', $callAutoload = TRUE) {
-    include_once(dirname(__FILE__).'/ProxyObject/Generator.php');
+  public function getProxy(
+    $originalClassName, array $methods = NULL, array $arguments = array(),
+    $proxyClassName = '', $callAutoload = TRUE
+  ) {
+    include_once(dirname(__FILE__) . '/ProxyObject/Generator.php');
     $proxyClass = PapayaProxyObjectGenerator::generate(
       $originalClassName, $methods, $proxyClassName, $callAutoload
     );
@@ -266,8 +334,8 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
 
   public function assertXmlFragmentEqualsXmlFragment($expected, $actual, $message = '') {
     $this->assertXmlStringEqualsXmlString(
-      '<fragment>'.$expected.'</fragment>',
-      '<fragment>'.$actual.'</fragment>',
+      '<fragment>' . $expected . '</fragment>',
+      '<fragment>' . $actual . '</fragment>',
       $message
     );
   }
