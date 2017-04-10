@@ -90,7 +90,9 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
 
   public function expectError($severity) {
     $levels = [
+      E_ERROR => ['PHPUnit_Framework_Error_Error', 'PHPUnit\\Framework\\Error\\Error'],
       E_NOTICE => ['PHPUnit_Framework_Error_Notice', 'PHPUnit\\Framework\\Error\\Notice'],
+      E_WARNING => ['PHPUnit_Framework_Error_Warning', 'PHPUnit\\Framework\\Error\\Warning'],
       E_DEPRECATED => ['PHPUnit_Framework_Error_Deprecated', 'PHPUnit\\Framework\\Error\\Deprecated']
     ];
     if ($levels[$severity]) {

@@ -308,16 +308,21 @@ class PapayaProxyObjectGenerator {
             try {
               $class = $parameter->getClass();
             } catch (ReflectionException $e) {
-              throw new PHPUnit_Framework_MockObject_Exception(
-                sprintf(
-                  'Cannot proxy %s::%s() because a class or ' .
-                  'interface used in the signature is not loaded',
-                  $method->getDeclaringClass()->getName(),
-                  $method->getName()
-                ),
-                0,
-                $e
+              $message = sprintf(
+                'Cannot proxy %s::%s() because a class or ' .
+                'interface used in the signature is not loaded',
+                $method->getDeclaringClass()->getName(),
+                $method->getName()
               );
+              if (class_exists('PHPUnit_Framework_MockObject_Exception')) {
+                throw new PHPUnit_Framework_MockObject_RuntimeException(
+                  $message, 0, $e
+                );
+              } else {
+                throw new PHPUnit\Framework\MockObject\RuntimeException(
+                  $message, 0, $e
+                );
+              }
             }
             if ($class !== NULL) {
               $typeHint = $class->getName() . ' ';
@@ -360,10 +365,6 @@ class PapayaProxyObjectGenerator {
    * @return boolean
    */
   protected static function createTemplateObject($file) {
-    if (version_compare(PHPUnit_Runner_Version::id(), '3.5', '>=')) {
-      return new Text_Template($file);
-    } else {
-      return new PHPUnit_Util_Template($file);
-    }
+    return new Text_Template($file);
   }
 }
