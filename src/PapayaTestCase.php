@@ -19,11 +19,9 @@ if (!defined('PAPAYA_DB_TBL_OPTIONS')) {
 }
 
 if (class_exists('PHPUnit\Framework\TestCase')) {
-  class Papaya_PHPUnitTestCase extends \PHPUnit\Framework\TestCase {
-  }
+  abstract class Papaya_PHPUnitTestCase extends \PHPUnit\Framework\TestCase {}
 } else {
-  class Papaya_PHPUnitTestCase extends \PHPUnit_Framework_TestCase {
-  }
+  abstract class Papaya_PHPUnitTestCase extends \PHPUnit_Framework_TestCase {}
 }
 
 abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
@@ -134,14 +132,14 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
     if (!$autoloadFunctions ||
       !in_array('PapayaAutoloader::load', $autoloadFunctions)
     ) {
-      include_once(PAPAYA_INCLUDE_PATH . 'system/Papaya/Autoloader.php');
+      include_once(PAPAYA_INCLUDE_PATH.'system/Papaya/Autoloader.php');
       spl_autoload_register('PapayaAutoloader::load');
     }
     foreach ($paths as $prefix => $path) {
       if (preg_match('(^/|[a-zA-Z]:[\\\\/])', $path)) {
         PapayaAutoloader::registerPath($prefix, $path);
       } else {
-        PapayaAutoloader::registerPath($prefix, PAPAYA_INCLUDE_PATH . $path);
+        PapayaAutoloader::registerPath($prefix, PAPAYA_INCLUDE_PATH.$path);
       }
     }
     if (isset($classMaps)) {
@@ -150,7 +148,7 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
       }
       foreach ($classMaps as $file) {
         if (!preg_match('(^/|[a-zA-Z]:[\\\\/])', $file)) {
-          $file = PAPAYA_INCLUDE_PATH . $file;
+          $file = PAPAYA_INCLUDE_PATH.$file;
         }
         PapayaAutoloader::registerClassMap(dirname($file), include($file));
       }
@@ -162,7 +160,7 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
    */
   public function mockPapaya() {
     if (NULL === $this->_papayaMocks) {
-      include_once(dirname(__FILE__) . '/Papaya/Mocks.php');
+      include_once(dirname(__FILE__).'/Papaya/Mocks.php');
       $this->_papayaMocks = new PapayaMocks($this);
     }
     return $this->_papayaMocks;
