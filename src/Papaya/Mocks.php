@@ -293,6 +293,7 @@ class PapayaMocks {
   public function databaseAccess() {
     $methods = array(
       'getTableName',
+      'getTimestamp',
       'deleteRecord',
       'enableAbsoluteCount',
       'escapeString', 
@@ -318,7 +319,11 @@ class PapayaMocks {
       ->expects($this->_testCase->any())
       ->method('getTableName')
       ->withAnyParameters()
-      ->willReturnArgument(0);
+      ->willReturnCallback(
+        function($tableName) {
+          return 'unittest_'.$tableName;
+        }
+      );
     return $databaseAccess;
   }
 
