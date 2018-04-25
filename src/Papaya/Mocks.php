@@ -321,7 +321,7 @@ class PapayaMocks {
       ->withAnyParameters()
       ->willReturnCallback(
         function($tableName) {
-          return 'unittest_'.$tableName;
+          return 'test_'.$tableName;
         }
       );
     return $databaseAccess;
