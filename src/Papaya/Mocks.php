@@ -26,6 +26,10 @@ class PapayaMocks {
    * $papaya
    ********************/
 
+  /**
+   * @param array $objects
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaApplication
+   */
   public function application(array $objects = array()) {
     $testCase = $this->_testCase;
     $values = array();
@@ -44,7 +48,7 @@ class PapayaMocks {
     }
     $testCase->{'context_application_objects'.spl_object_hash($this)} = $values;
 
-    $application = $testCase->getMock('PapayaApplication');
+    $application = $testCase->getMockBuilder(PapayaApplication::class)->getMock();
     $application
       ->expects($testCase->any())
       ->method('__isset')
@@ -97,13 +101,18 @@ class PapayaMocks {
    * $papaya->options
    ********************/
 
+  /**
+   * @param array $values
+   * @param array $tables
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaConfigurationCms
+   */
   public function options(array $values = array(), array $tables = array()) {
     $testCase = $this->_testCase;
     $testCase->{'context_options_'.spl_object_hash($this)} = $values;
     $testCase->{'context_tables_'.spl_object_hash($this)} = $tables;
 
     $options = $testCase
-      ->getMockBuilder('PapayaConfigurationCms')
+      ->getMockBuilder(PapayaConfigurationCms::class)
       ->disableOriginalConstructor()
       ->getMock();
     $options
@@ -152,6 +161,12 @@ class PapayaMocks {
    * $papaya->request
    ********************/
 
+  /**
+   * @param array $parameters
+   * @param string $url
+   * @param string $separator
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaRequest
+   */
   public function request(
     array $parameters = array(), $url = 'http://www.test.tld/test.html', $separator = '[]'
   ) {
@@ -160,7 +175,7 @@ class PapayaMocks {
 
     $testCase->$property = new PapayaRequestParameters();
     $testCase->$property->merge($parameters);
-    $request = $testCase->getMock('PapayaRequest');
+    $request = $testCase->getMock(PapayaRequest::class);
     $request
       ->expects($testCase->any())
       ->method('getUrl')
@@ -215,16 +230,23 @@ class PapayaMocks {
    * $papaya->response
    ********************/
 
+  /**
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaResponse
+   */
   public function response() {
-    return $this->_testCase->getMock('PapayaResponse');
+    return $this->_testCase->getMockBuilder(PapayaResponse::class)->getMock();
   }
 
   /*****************************
    * $papaya->administrationUser
    ****************************/
 
+  /**
+   * @param $isLoggedIn
+   * @return PHPUnit_Framework_MockObject_MockObject|base_auth
+   */
   public function user($isLoggedIn) {
-    $user = $this->_testCase->getMock('base_auth');
+    $user = $this->_testCase->getMockBuilder(base_auth::class)->getMock();
     $user
       ->expects($this->_testCase->any())
       ->method('isLoggedIn')
@@ -232,7 +254,15 @@ class PapayaMocks {
     return $user;
   }
 
-  public function administrationLanguage($language = NULL) {
+  /*****************************
+   * $papaya->administrationLanguage
+   ****************************/
+
+  /**
+   * @param PapayaContentLanguage|null $language
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaAdministrationLanguagesSwitch
+   */
+  public function administrationLanguage(PapayaContentLanguage $language = NULL) {
     if (!isset($language)) {
       $language = new PapayaContentLanguage();
       $language->assign(
@@ -247,7 +277,7 @@ class PapayaMocks {
         ]
       );
     }
-    $switch = $this->_testCase->getMockBuilder('PapayaAdministrationLanguagesSwitch')->getMock();
+    $switch = $this->_testCase->getMockBuilder(PapayaAdministrationLanguagesSwitch::class)->getMock();
     $switch
       ->expects($this->_testCase->any())
       ->method('getCurrent')
@@ -259,7 +289,12 @@ class PapayaMocks {
    * PapayaDatabaseRecord
    ********************/
 
-  public function record(array $data = array(), $className = 'PapayaDatabaseInterfaceRecord') {
+  /**
+   * @param array $data
+   * @param string $className
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaDatabaseInterfaceRecord
+   */
+  public function record(array $data = array(), $className = PapayaDatabaseInterfaceRecord::class) {
     $valueMapExists = array();
     $valueMapIsset = array();
     $valueMapGet = array();
@@ -306,11 +341,11 @@ class PapayaMocks {
   /**
    * @param string $url
    * @param null|PapayaUiReference|string $reference or reference class name
-   * @return null|PHPUnit_Framework_MockObject_MockObject
+   * @return null|PHPUnit_Framework_MockObject_MockObject|PapayaUiReference
    */
   public function reference($url = 'http://www.example.html', $reference = NULL) {
     if (!isset($reference)) {
-      $reference = $this->_testCase->getMock('PapayaUiReference');
+      $reference = $this->_testCase->getMock(PapayaUiReference::class);
     } elseif (is_string($reference)) {
       $reference = $this->_testCase->getMock($reference);
     }
@@ -333,9 +368,13 @@ class PapayaMocks {
    * PapayaUiReferenceFactory
    *************************/
 
+  /**
+   * @param array $links
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaUiReferenceFactory
+   */
   public function references(array $links = array()) {
     $this->_testCase->{'context_references_factory_mapping'.spl_object_hash($this)} = $links;
-    $references = $this->_testCase->getMock('PapayaUiReferenceFactory');
+    $references = $this->_testCase->getMock(PapayaUiReferenceFactory::class);
     $references
       ->expects($this->_testCase->any())
       ->method('byString')
