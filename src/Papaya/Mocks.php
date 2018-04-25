@@ -320,8 +320,8 @@ class PapayaMocks {
       ->method('getTableName')
       ->withAnyParameters()
       ->willReturnCallback(
-        function($tableName) {
-          return 'test_'.$tableName;
+        function($tableName, $usePrefix = TRUE) {
+          return ($usePrefix && 0 !== strpos($tableName, 'table_') ? 'table_' : '').$tableName;
         }
       );
     return $databaseAccess;
