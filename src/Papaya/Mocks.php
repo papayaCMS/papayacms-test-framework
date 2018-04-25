@@ -285,6 +285,37 @@ class PapayaMocks {
     return $switch;
   }
 
+  /**
+   * Create a mock of PapayaDatabaseAccess usable for normal data operations (not schema manipulation)
+   *
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaDatabaseAccess
+   */
+  public function databaseAccess() {
+    $methods = array(
+      'getTableName',
+      'deleteRecord',
+      'enableAbsoluteCount',
+      'escapeString', 
+      'quoteString',
+      'getSqlCondition', 
+      'insertRecord', 
+      'insertRecords', 
+      'lastInsertId', 
+      'query', 
+      'queryFmt', 
+      'queryFmtWrite', 
+      'queryWrite', 
+      'loadRecord', 
+      'updateRecord'
+    );
+    return $this
+      ->_testCase
+      ->getMockBuilder(PapayaDatabaseAccess::class)
+      ->setMethods($methods)
+      ->setConstructorArgs(array(new stdClass))
+      ->getMock();
+  }
+
   /*********************
    * PapayaDatabaseRecord
    ********************/
