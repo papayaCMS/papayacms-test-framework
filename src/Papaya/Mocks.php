@@ -308,12 +308,18 @@ class PapayaMocks {
       'loadRecord', 
       'updateRecord'
     );
-    return $this
+    $databeAccess = $this
       ->_testCase
       ->getMockBuilder(PapayaDatabaseAccess::class)
       ->setMethods($methods)
       ->setConstructorArgs(array(new stdClass))
       ->getMock();
+    $databaseAccess
+      ->expects($this->any())
+      ->method('getTableName')
+      ->withAnyParameters()
+      ->will($this->returnArgument(0));
+    return $databeAccess;
   }
 
   /*********************
