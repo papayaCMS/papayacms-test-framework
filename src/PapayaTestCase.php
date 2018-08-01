@@ -319,9 +319,14 @@ abstract class PapayaTestCase extends Papaya_PHPUnitTestCase {
       return $proxy->newInstanceArgs($arguments);
     }
   }
-
+  
+  /**
+   * @param $expected
+   * @param \PapayaXmlAppendable|\Papaya\Xml\Appendable $control
+   * @param string $message
+   */
   public function assertAppendedXmlEqualsXmlFragment(
-    $expected, PapayaXmlAppendable $control, $message = ''
+    $expected, $control, $message = ''
   ) {
     $actualDom = new PapayaXmlDocument();
     $parent = $actualDom->appendElement('fragment');
