@@ -147,9 +147,9 @@ namespace Papaya {
       }
       foreach ($paths as $prefix => $path) {
         if (preg_match('(^/|[a-zA-Z]:[\\\\/])', $path)) {
-          PapayaAutoloader::registerPath($prefix, $path);
+          \PapayaAutoloader::registerPath($prefix, $path);
         } else {
-          PapayaAutoloader::registerPath($prefix, PAPAYA_INCLUDE_PATH.$path);
+          \PapayaAutoloader::registerPath($prefix, PAPAYA_INCLUDE_PATH.$path);
         }
       }
       if (isset($classMaps)) {
@@ -160,7 +160,7 @@ namespace Papaya {
           if (!preg_match('(^/|[a-zA-Z]:[\\\\/])', $file)) {
             $file = PAPAYA_INCLUDE_PATH.$file;
           }
-          PapayaAutoloader::registerClassMap(dirname($file), include($file));
+          \PapayaAutoloader::registerClassMap(dirname($file), include($file));
         }
       }
     }
@@ -171,7 +171,7 @@ namespace Papaya {
     public function mockPapaya() {
       if (NULL === $this->_papayaMocks) {
         include_once(dirname(__FILE__).'/Papaya/Mocks.php');
-        $this->_papayaMocks = new PapayaMocks($this);
+        $this->_papayaMocks = new \PapayaMocks($this);
       }
       return $this->_papayaMocks;
     }
@@ -182,7 +182,7 @@ namespace Papaya {
     public function domFixture() {
       if (NULL === $this->_papayaDomFixtures) {
         include_once(dirname(__FILE__).'/Papaya/DomFixtures.php');
-        $this->_papayaDomFixtures = new PapayaDomFixtures($this);
+        $this->_papayaDomFixtures = new \PapayaDomFixtures($this);
       }
       return $this->_papayaDomFixtures;
     }
@@ -289,9 +289,9 @@ namespace Papaya {
           if (file_exists($temporaryDirectory) &&
             is_dir($temporaryDirectory)
           ) {
-            $directoryIterator = new RecursiveDirectoryIterator($temporaryDirectory);
-            $fileIterator = new RecursiveIteratorIterator(
-              $directoryIterator, RecursiveIteratorIterator::CHILD_FIRST
+            $directoryIterator = new \RecursiveDirectoryIterator($temporaryDirectory);
+            $fileIterator = new \RecursiveIteratorIterator(
+              $directoryIterator, \RecursiveIteratorIterator::CHILD_FIRST
             );
             foreach ($fileIterator as $file) {
               if ($file->isDir()) {
@@ -315,7 +315,7 @@ namespace Papaya {
       $proxyClassName = '', $callAutoload = TRUE
     ) {
       include_once(dirname(__FILE__).'/ProxyObject/Generator.php');
-      $proxyClass = PapayaProxyObjectGenerator::generate(
+      $proxyClass = \PapayaProxyObjectGenerator::generate(
         $originalClassName, $methods, $proxyClassName, $callAutoload
       );
       if (!class_exists($proxyClass['proxyClassName'], FALSE)) {
@@ -324,7 +324,7 @@ namespace Papaya {
       if (empty($arguments)) {
         return new $proxyClass['proxyClassName']();
       } else {
-        $proxy = new ReflectionClass($proxyClass['proxyClassName']);
+        $proxy = new \ReflectionClass($proxyClass['proxyClassName']);
         return $proxy->newInstanceArgs($arguments);
       }
     }
@@ -337,7 +337,7 @@ namespace Papaya {
     public function assertAppendedXmlEqualsXmlFragment(
       $expected, $control, $message = ''
     ) {
-      $actualDom = new PapayaXmlDocument();
+      $actualDom = new \PapayaXmlDocument();
       $parent = $actualDom->appendElement('fragment');
       $control->appendTo($parent);
       $this->assertXmlFragmentEqualsXmlFragment(
@@ -375,7 +375,7 @@ namespace Papaya {
       $proxyTarget = NULL
     ) {
       if (method_exists($this, 'createMock')) {
-        $mockBuilder = new PHPUnit_Framework_MockObject_MockBuilder($this, $originalClassName);
+        $mockBuilder = new \PHPUnit_Framework_MockObject_MockBuilder($this, $originalClassName);
         if (!empty($methods)) {
           $mockBuilder->setMethods($methods);
         }
