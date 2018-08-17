@@ -28,7 +28,7 @@ class PapayaMocks {
 
   /**
    * @param array $objects
-   * @return PHPUnit_Framework_MockObject_MockObject|PapayaApplication
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaApplication|\Papaya\Application
    */
   public function application(array $objects = array()) {
     $testCase = $this->_testCase;
@@ -104,7 +104,7 @@ class PapayaMocks {
   /**
    * @param array $values
    * @param array $tables
-   * @return PHPUnit_Framework_MockObject_MockObject|PapayaConfigurationCms
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaConfigurationCms|Papaya\Configuration\Cms
    */
   public function options(array $values = array(), array $tables = array()) {
     $testCase = $this->_testCase;
@@ -165,7 +165,7 @@ class PapayaMocks {
    * @param array $parameters
    * @param string $url
    * @param string $separator
-   * @return PHPUnit_Framework_MockObject_MockObject|PapayaRequest
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaRequest|\Papaya\Request
    */
   public function request(
     array $parameters = array(), $url = 'http://www.test.tld/test.html', $separator = '[]'
@@ -231,7 +231,7 @@ class PapayaMocks {
    ********************/
 
   /**
-   * @return PHPUnit_Framework_MockObject_MockObject|PapayaResponse
+   * @return PHPUnit_Framework_MockObject_MockObject|PapayaResponse|\Papaya\Response
    */
   public function response() {
     return $this->_testCase->getMockBuilder(PapayaResponse::class)->getMock();
@@ -288,7 +288,7 @@ class PapayaMocks {
   /**
    * Create a mock of PapayaDatabaseAccess usable for normal data operations (not schema manipulation)
    *
-   * @return PHPUnit_Framework_MockObject_MockObject|PapayaDatabaseAccess
+   * @return PHPUnit_Framework_MockObject_MockObject|Papaya\Database\Access
    */
   public function databaseAccess() {
     $methods = array(
