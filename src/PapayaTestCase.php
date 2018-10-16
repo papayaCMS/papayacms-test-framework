@@ -1,6 +1,6 @@
 <?php
 
-namespace Papaya {
+namespace Papaya\Test {
 
   if (!defined('PAPAYA_INCLUDE_PATH')) {
     $dir = dirname(__FILE__);
@@ -46,7 +46,7 @@ namespace Papaya {
     /**
      * Papaya Mock Factory instance
      *
-     * @var PapayaMocks
+     * @var \Papaya\Mocks
      */
     private $_papayaMocks = NULL;
 
@@ -54,7 +54,7 @@ namespace Papaya {
     /**
      * Papaya Dom Fixtures Factory instance
      *
-     * @var PapayaDomFixtures
+     * @var \Papaya\DomFixtures
      */
     private $_papayaDomFixtures = NULL;
 
@@ -166,23 +166,21 @@ namespace Papaya {
     }
 
     /**
-     * @return PapayaMocks
+     * @return \Papaya\Test\Mocks
      */
     public function mockPapaya() {
       if (NULL === $this->_papayaMocks) {
-        include_once(dirname(__FILE__).'/Papaya/Mocks.php');
-        $this->_papayaMocks = new \PapayaMocks($this);
+        $this->_papayaMocks = new \Papaya\Test\Mocks($this);
       }
       return $this->_papayaMocks;
     }
 
     /**
-     * @return PapayaDomFixtures
+     * @return \Papaya\Test\DOMFixtures
      */
     public function domFixture() {
       if (NULL === $this->_papayaDomFixtures) {
-        include_once(dirname(__FILE__).'/Papaya/DomFixtures.php');
-        $this->_papayaDomFixtures = new \PapayaDomFixtures($this);
+        $this->_papayaDomFixtures = new \Papaya\Test\DOMFixtures($this);
       }
       return $this->_papayaDomFixtures;
     }
@@ -415,6 +413,7 @@ namespace Papaya {
     }
   }
 
+  class_alias(TestCase::class, 'Papaya\TestCase');
   class_alias(TestCase::class, 'PapayaTestcase');
 }
 
