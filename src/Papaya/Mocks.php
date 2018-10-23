@@ -439,5 +439,26 @@ namespace Papaya\Test {
         return $this->reference('link:'.$index);
       }
     }
+
+    /**
+     * Administration UI with Template object
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Papaya\Administration\UI
+     */
+    public function administrationUI() {
+      $template = $this
+        ->_testCase
+        ->getMockBuilder(\Papaya\Template::class)
+        ->setMethods(
+          ['add', 'addNavigation', 'addInformation', 'addContent', 'addMenu', 'addScript', 'parse']
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+      $ui = $this->_testCase->getMockBuilder(\Papaya\Administration\UI::class)->disableOriginalConstructor()->getMock();
+      $ui
+        ->expects($this->_testCase->any())
+        ->method('template')
+        ->willReturn($template);
+      return $ui;
+    }
   }
 }
