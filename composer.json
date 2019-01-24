@@ -3,6 +3,9 @@
   "description": "papaya CMS unittest framework",
   "license": "GPL-2.0",
   "homepage": "http://www.papaya-cms.com/",
+  "require": {
+    "papaya/cms-core": "^6.7"
+  }
   "autoload": {
     "classmap": ["./src/"]
   }
