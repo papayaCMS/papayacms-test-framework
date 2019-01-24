@@ -5,7 +5,7 @@
   "homepage": "http://www.papaya-cms.com/",
   "require": {
     "papaya/cms-core": "^6.7"
-  }
+  },
   "autoload": {
     "classmap": ["./src/"]
   }
