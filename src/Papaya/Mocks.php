@@ -304,6 +304,7 @@ namespace Papaya\Test {
         'escapeString',
         'quoteString',
         'getSqlCondition',
+        'getSqlSource',
         'insertRecord',
         'insertRecords',
         'lastInsertId',
