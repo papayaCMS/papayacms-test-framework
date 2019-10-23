@@ -31,7 +31,7 @@ namespace Papaya\Test {
 
     /**
      * @param array $objects
-     * @return PHPUnit_Framework_MockObject_MockObject|\PapayaApplication|\Papaya\Application
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaApplication|\Papaya\Application
      */
     public function application(array $objects = []) {
       $testCase = $this->_testCase;
@@ -107,7 +107,7 @@ namespace Papaya\Test {
     /**
      * @param array $values
      * @param array $tables
-     * @return PHPUnit_Framework_MockObject_MockObject|PapayaConfigurationCms|Papaya\Configuration\CMS
+     * @return \PHPUnit_Framework_MockObject_MockObject|PapayaConfigurationCms|Papaya\Configuration\CMS
      */
     public function options(array $values = [], array $tables = []) {
       $testCase = $this->_testCase;
@@ -170,7 +170,7 @@ namespace Papaya\Test {
      * @param array $parameters
      * @param string $url
      * @param string $separator
-     * @return PHPUnit_Framework_MockObject_MockObject|\PapayaRequest|\Papaya\Request
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaRequest|\Papaya\Request
      */
     public function request(
       array $parameters = [], $url = 'http://www.test.tld/test.html', $separator = '[]'
@@ -236,7 +236,7 @@ namespace Papaya\Test {
      ********************/
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|\PapayaResponse|\Papaya\Response
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaResponse|\Papaya\Response
      */
     public function response() {
       return $this->_testCase->getMockBuilder(\PapayaResponse::class)->getMock();
@@ -248,7 +248,7 @@ namespace Papaya\Test {
 
     /**
      * @param $isLoggedIn
-     * @return PHPUnit_Framework_MockObject_MockObject|base_auth
+     * @return \PHPUnit_Framework_MockObject_MockObject|base_auth
      */
     public function user($isLoggedIn) {
       $user = $this->_testCase->getMockBuilder(\base_auth::class)->getMock();
@@ -265,7 +265,7 @@ namespace Papaya\Test {
 
     /**
      * @param \PapayaContentLanguage|\Papaya\Content\Language|null $language
-     * @return PHPUnit_Framework_MockObject_MockObject|\PapayaAdministrationLanguagesSwitch|\Papaya\Administration\Languages\Selector
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaAdministrationLanguagesSwitch|\Papaya\Administration\Languages\Selector
      */
     public function administrationLanguage(\PapayaContentLanguage $language = NULL) {
       if (!isset($language)) {
@@ -293,7 +293,7 @@ namespace Papaya\Test {
     /**
      * Create a mock of PapayaDatabaseAccess usable for normal data operations (not schema manipulation)
      *
-     * @return PHPUnit_Framework_MockObject_MockObject|\PapayaDatabaseAccess|\Papaya\Database\Access
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaDatabaseAccess|\Papaya\Database\Access
      */
     public function databaseAccess() {
       $methods = [
@@ -340,7 +340,7 @@ namespace Papaya\Test {
     /**
      * @param array $data
      * @param string $className
-     * @return PHPUnit_Framework_MockObject_MockObject|\PapayaDatabaseInterfaceRecord|\Papaya\Database\Interfaces\Record
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaDatabaseInterfaceRecord|\Papaya\Database\Interfaces\Record
      */
     public function record(array $data = [], $className = \PapayaDatabaseInterfaceRecord::class) {
       $valueMapExists = [];
@@ -418,7 +418,7 @@ namespace Papaya\Test {
 
     /**
      * @param array $links
-     * @return PHPUnit_Framework_MockObject_MockObject|\PapayaUiReferenceFactory|\Papaya\UI\Reference\Factory
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaUiReferenceFactory|\Papaya\UI\Reference\Factory
      */
     public function references(array $links = []) {
       $this->_testCase->{'context_references_factory_mapping'.spl_object_hash($this)} = $links;
