@@ -389,7 +389,7 @@ namespace Papaya\Test {
     /**
      * @param string $url
      * @param null|PapayaUiReference|string|\Papaya\UI\Reference $reference or reference class name
-     * @return null|PHPUnit_Framework_MockObject_MockObject|\PapayaUiReference|\Papaya\UI\Reference
+     * @return null|\PHPUnit_Framework_MockObject_MockObject|\PapayaUiReference|\Papaya\UI\Reference
      */
     public function reference($url = 'http://www.example.html', $reference = NULL) {
       if (!isset($reference)) {
