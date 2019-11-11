@@ -107,7 +107,7 @@ namespace Papaya\Test {
     /**
      * @param array $values
      * @param array $tables
-     * @return \PHPUnit_Framework_MockObject_MockObject|PapayaConfigurationCms|Papaya\Configuration\CMS
+     * @return \PHPUnit_Framework_MockObject_MockObject|\PapayaConfigurationCms|\Papaya\Configuration\CMS
      */
     public function options(array $values = [], array $tables = []) {
       $testCase = $this->_testCase;
