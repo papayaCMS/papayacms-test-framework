@@ -2,6 +2,8 @@
 
 namespace Papaya\Test {
 
+  use PHPUnit\Framework\MockObject\MockBuilder;
+
   if (!defined('PAPAYA_INCLUDE_PATH')) {
     $dir = dirname(__FILE__);
     if (is_dir($dir.'/../../cms-core/src')) {
@@ -66,7 +68,7 @@ namespace Papaya\Test {
      * @param string|null $message
      * @param int|null $code
      */
-    public function expectException($exception, $message = NULL, $code = NULL) {
+    public function expectException(string $exception, string $message = NULL, string $code = NULL): void {
       static $useBC = NULL;
       if (NULL === $useBC) {
         $useBC = FALSE !== array_search('expectException', get_class_methods(Papaya_PHPUnitTestCase::class));
@@ -94,25 +96,6 @@ namespace Papaya\Test {
      */
     public function setExpectedException($exception, $message = NULL, $code = NULL) {
       $this->expectException($exception, $message, $code);
-    }
-
-    public function expectError($severity) {
-      $levels = [
-        E_ERROR => ['PHPUnit_Framework_Error_Error', 'PHPUnit\\Framework\\Error\\Error'],
-        E_NOTICE => ['PHPUnit_Framework_Error_Notice', 'PHPUnit\\Framework\\Error\\Notice'],
-        E_WARNING => ['PHPUnit_Framework_Error_Warning', 'PHPUnit\\Framework\\Error\\Warning'],
-        E_DEPRECATED => ['PHPUnit_Framework_Error_Deprecated', 'PHPUnit\\Framework\\Error\\Deprecated']
-      ];
-      if ($levels[$severity]) {
-        foreach ($levels[$severity] as $class) {
-          if (class_exists($class)) {
-            $this->expectException($class);
-            break;
-          }
-        }
-      } else {
-        throw new \InvalidArgumentException('Can not map severity to exception class.');
-      }
     }
 
     /**
@@ -365,7 +348,7 @@ namespace Papaya\Test {
      * @param bool $callAutoload
      * @param bool $cloneArguments
      * @param bool $callOriginalMethods
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockBuilder
      */
     public function getMock(
       $originalClassName, $methods = [], array $arguments = [], $mockClassName = '', $callOriginalConstructor = TRUE,
@@ -373,7 +356,7 @@ namespace Papaya\Test {
       $proxyTarget = NULL
     ) {
       if (method_exists($this, 'createMock')) {
-        $mockBuilder = new \PHPUnit_Framework_MockObject_MockBuilder($this, $originalClassName);
+        $mockBuilder = new MockBuilder($this, $originalClassName);
         if (!empty($methods)) {
           $mockBuilder->setMethods($methods);
         }
